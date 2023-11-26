@@ -1,0 +1,48 @@
+
+gameplay.png
+size: 1024, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+apple
+  rotate: false
+  xy: 654, 830
+  size: 50, 50
+  orig: 50, 50
+  offset: 0, 0
+  index: -1
+background
+  rotate: false
+  xy: 2, 120
+  size: 650, 760
+  orig: 650, 760
+  offset: 0, 0
+  index: -1
+bullet
+  rotate: false
+  xy: 654, 796
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+duck
+  rotate: false
+  xy: 2, 54
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+goldenapple
+  rotate: false
+  xy: 2, 2
+  size: 50, 50
+  orig: 50, 50
+  offset: 0, 0
+  index: -1
+worm
+  rotate: false
+  xy: 68, 78
+  size: 40, 40
+  orig: 40, 40
+  offset: 0, 0
+  index: -1
