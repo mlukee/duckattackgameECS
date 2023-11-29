@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
 
@@ -17,6 +18,7 @@ import com.duckattackecs.si.ecs.component.BulletComponent;
 import com.duckattackecs.si.ecs.component.CleanUpComponent;
 import com.duckattackecs.si.ecs.component.DimensionComponent;
 import com.duckattackecs.si.ecs.component.DuckComponent;
+import com.duckattackecs.si.ecs.component.GoldenAppleComponent;
 import com.duckattackecs.si.ecs.component.MovementComponentXYR;
 import com.duckattackecs.si.ecs.component.ParticleComponent;
 import com.duckattackecs.si.ecs.component.PositionComponent;
@@ -28,9 +30,12 @@ import com.duckattackecs.si.ecs.component.ZOrderComponent;
 public class EntityFactorySystem extends EntitySystem {
 
     private static final int BACKGROUND_Z_ORDER = 0;
-    private static final int ASTEROID_Z_ORDER = 1;
-    private static final int ASTRONAUT_Z_ORDER = 2;
-    private static final int ROCKET_Z_ORDER = 3;
+    private static final int WORM_Z_ORDER = 1;
+    private static final int GOLDEN_APPLE_Z_ORDER = 2;
+    private static final int DUCK_Z_ORDER = 3;
+    private static final int APPLE_Z_ORDER = 4;
+    private static final int GOLDEN_APPLE_PE_Z_ORDER = 5;
+    private static final int BULLET_Z_ORDER = 5;
 
     private final AssetManager assetManager;
 
@@ -75,7 +80,7 @@ public class EntityFactorySystem extends EntitySystem {
         texture.region = gamePlayAtlas.findRegion(RegionNames.WORM);
 
         ZOrderComponent zOrder = engine.createComponent(ZOrderComponent.class);
-        zOrder.z = ROCKET_Z_ORDER;
+        zOrder.z = WORM_Z_ORDER;
 
         Entity entity = engine.createEntity();
         entity.add(position);
@@ -89,32 +94,62 @@ public class EntityFactorySystem extends EntitySystem {
         engine.addEntity(entity);
     }
 
-    public void createApple() {
+    public void createBackground(){
+        PositionComponent position = engine.createComponent(PositionComponent.class);
+        position.x = 0;
+        position.y = 0;
+
+        DimensionComponent dimension = engine.createComponent(DimensionComponent.class);
+        dimension.width = GameConfig.WIDTH;
+        dimension.height = GameConfig.HEIGHT;
+
+        TextureComponent texture = engine.createComponent(TextureComponent.class);
+        texture.region = gamePlayAtlas.findRegion(RegionNames.BACKGROUND);
+
+        ZOrderComponent zOrder = engine.createComponent(ZOrderComponent.class);
+        zOrder.z = BACKGROUND_Z_ORDER;
+
+        Entity entity = engine.createEntity();
+        entity.add(position);
+        entity.add(dimension);
+        entity.add(texture);
+        entity.add(zOrder);
+        engine.addEntity(entity);
+    }
+
+    public void createGoldenApple(){
         PositionComponent position = engine.createComponent(PositionComponent.class);
 
-        position.x = MathUtils.random(0, GameConfig.WIDTH - GameConfig.APPLE_WIDTH);
+        position.x = MathUtils.random(0, GameConfig.WIDTH - GameConfig.GOLDEN_APPLE_WIDTH);
         position.y = GameConfig.HEIGHT;
 
         MovementComponentXYR movementComponent = engine.createComponent(MovementComponentXYR.class);
-        movementComponent.xSpeed = -GameConfig.APPLE_SPEED_X_MIN * MathUtils.random(-1f, 1f);
-        movementComponent.ySpeed = -GameConfig.APPLE_SPEED_X_MIN * MathUtils.random(1f, 2f);
+        movementComponent.xSpeed = GameConfig.GOLDEN_APPLE_SPEED_X_MIN * MathUtils.random(-0.1f, 0.1f);
+        movementComponent.ySpeed = -GameConfig.GOLDEN_APPLE_SPEED_X_MIN * MathUtils.random(1f, 2f);
 
-        float randFactor = MathUtils.random(1f, 4f);
+        float randFactor = MathUtils.random(1f, 2f);
         DimensionComponent dimension = engine.createComponent(DimensionComponent.class);
-        dimension.width = GameConfig.APPLE_WIDTH * randFactor;
-        dimension.height = GameConfig.APPLE_HEIGHT * randFactor;
+        dimension.width = GameConfig.GOLDEN_APPLE_WIDTH * randFactor;
+        dimension.height = GameConfig.GOLDEN_APPLE_HEIGHT * randFactor;
 
         BoundsComponent bounds = engine.createComponent(BoundsComponent.class);
         bounds.rectangle.setPosition(position.x, position.y);
         bounds.rectangle.setSize(dimension.width, dimension.height);
 
-        AppleComponent asteroidComponent = engine.createComponent(AppleComponent.class);
+        GoldenAppleComponent goldenApple = engine.createComponent(GoldenAppleComponent.class);
+
+        ParticleComponent particle = engine.createComponent(ParticleComponent.class);
+        particle.particleEffect = new ParticleEffect(assetManager.get(AssetDescriptors.GOLDEN_APPLE_PE));
+        particle.particleEffect.start();
+
+        ZOrderComponent particleZOrder = engine.createComponent(ZOrderComponent.class);
+        particleZOrder.z = GOLDEN_APPLE_PE_Z_ORDER;
 
         TextureComponent texture = engine.createComponent(TextureComponent.class);
-        texture.region = gamePlayAtlas.findRegion(RegionNames.APPLE);
+        texture.region = gamePlayAtlas.findRegion(RegionNames.GOLDEN_APPLE);
 
         ZOrderComponent zOrder = engine.createComponent(ZOrderComponent.class);
-        zOrder.z = ASTEROID_Z_ORDER;
+        zOrder.z = GOLDEN_APPLE_Z_ORDER;
 
         WorldWrapComponent worldWrap = engine.createComponent(WorldWrapComponent.class);
 
@@ -125,7 +160,53 @@ public class EntityFactorySystem extends EntitySystem {
         entity.add(dimension);
         entity.add(bounds);
         entity.add(movementComponent);
-        entity.add(asteroidComponent);
+        entity.add(goldenApple);
+        entity.add(particle);
+        entity.add(particleZOrder);
+        entity.add(texture);
+        entity.add(zOrder);
+        entity.add(worldWrap);
+        entity.add(cleanUp);
+        engine.addEntity(entity);
+    }
+
+    public void createApple() {
+        PositionComponent position = engine.createComponent(PositionComponent.class);
+
+        position.x = MathUtils.random(0, GameConfig.WIDTH - GameConfig.APPLE_WIDTH);
+        position.y = GameConfig.HEIGHT;
+
+        MovementComponentXYR movementComponent = engine.createComponent(MovementComponentXYR.class);
+        movementComponent.xSpeed = GameConfig.APPLE_SPEED_X_MIN * MathUtils.random(-0.1f, 0.1f);
+        movementComponent.ySpeed = -GameConfig.APPLE_SPEED_X_MIN * MathUtils.random(1f, 2f);
+
+        float randFactor = MathUtils.random(1f, 2f);
+        DimensionComponent dimension = engine.createComponent(DimensionComponent.class);
+        dimension.width = GameConfig.APPLE_WIDTH * randFactor;
+        dimension.height = GameConfig.APPLE_HEIGHT * randFactor;
+
+        BoundsComponent bounds = engine.createComponent(BoundsComponent.class);
+        bounds.rectangle.setPosition(position.x, position.y);
+        bounds.rectangle.setSize(dimension.width, dimension.height);
+
+        AppleComponent appleComponent = engine.createComponent(AppleComponent.class);
+
+        TextureComponent texture = engine.createComponent(TextureComponent.class);
+        texture.region = gamePlayAtlas.findRegion(RegionNames.APPLE);
+
+        ZOrderComponent zOrder = engine.createComponent(ZOrderComponent.class);
+        zOrder.z = APPLE_Z_ORDER;
+
+        WorldWrapComponent worldWrap = engine.createComponent(WorldWrapComponent.class);
+
+        CleanUpComponent cleanUp = engine.createComponent(CleanUpComponent.class);
+
+        Entity entity = engine.createEntity();
+        entity.add(position);
+        entity.add(dimension);
+        entity.add(bounds);
+        entity.add(movementComponent);
+        entity.add(appleComponent);
         entity.add(texture);
         entity.add(zOrder);
         entity.add(worldWrap);
@@ -142,11 +223,12 @@ public class EntityFactorySystem extends EntitySystem {
         movementComponent.xSpeed = GameConfig.APPLE_SPEED_X_MIN * MathUtils.random(-0.1f, 0.1f);
         movementComponent.ySpeed = -GameConfig.APPLE_SPEED_X_MIN * MathUtils.random(1f, 2f);
 
-        DuckComponent astronaut = engine.createComponent(DuckComponent.class);
+        DuckComponent duck = engine.createComponent(DuckComponent.class);
 
+        float randFactor = MathUtils.random(1f, 2f);
         DimensionComponent dimension = engine.createComponent(DimensionComponent.class);
-        dimension.width = GameConfig.DUCK_SIZE;
-        dimension.height = GameConfig.DUCK_SIZE;
+        dimension.width = GameConfig.DUCK_SIZE * randFactor;
+        dimension.height = GameConfig.DUCK_SIZE * randFactor;
 
         BoundsComponent bounds = engine.createComponent(BoundsComponent.class);
         bounds.rectangle.setPosition(position.x, position.y);
@@ -156,7 +238,9 @@ public class EntityFactorySystem extends EntitySystem {
         texture.region = gamePlayAtlas.findRegion(RegionNames.DUCK);
 
         ZOrderComponent zOrder = engine.createComponent(ZOrderComponent.class);
-        zOrder.z = ASTRONAUT_Z_ORDER;
+        zOrder.z = DUCK_Z_ORDER;
+
+        WorldWrapComponent worldWrap = engine.createComponent(WorldWrapComponent.class);
 
         CleanUpComponent cleanUp = engine.createComponent(CleanUpComponent.class);
 
@@ -165,9 +249,10 @@ public class EntityFactorySystem extends EntitySystem {
         entity.add(dimension);
         entity.add(bounds);
         entity.add(movementComponent);
-        entity.add(astronaut);
+        entity.add(duck);
         entity.add(texture);
         entity.add(zOrder);
+        entity.add(worldWrap);
         entity.add(cleanUp);
         engine.addEntity(entity);
     }

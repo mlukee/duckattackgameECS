@@ -39,15 +39,19 @@ public class SoundSystem extends EntitySystem {
     public void hit() {
         hitSound.play();
     }
+
     public void quack() {
         quackSound.play();
     }
+
     public void gameOver() {
         gameOverSound.play();
     }
+
     public void eating() {
         eatingSound.play();
     }
+
     public void collected() {
         collectedSound.play();
     }

@@ -30,10 +30,10 @@ public class DebugInputSystem extends EntitySystem {
 
     @Override
     public void update(float deltaTime) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.F5)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
             debugGrid = !debugGrid;
             toggleSystems();
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.F6)) {
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.U)) {
             debugRender = !debugRender;
             toggleSystems();
         }

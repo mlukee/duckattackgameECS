@@ -7,6 +7,8 @@ public class GameManager {
     private int result;
     private int health;
 
+    private boolean doublePoints = false;
+
     private GameManager() {
     }
 
@@ -20,7 +22,10 @@ public class GameManager {
     }
 
     public void incResult() {
-        result++;
+        if(doublePoints)
+            result+=2;
+        else
+            result++;
     }
 
     public boolean isGameOver() {
@@ -32,6 +37,16 @@ public class GameManager {
     }
 
     public void damage() {
-        health--;
+        health-=10;
+    }
+
+    public boolean isDoublePoints() {
+        return doublePoints;
+    }
+    public void activatePowerUp() {
+        doublePoints = true;
+    }
+    public void deactivatePowerUp() {
+        doublePoints = false;
     }
 }

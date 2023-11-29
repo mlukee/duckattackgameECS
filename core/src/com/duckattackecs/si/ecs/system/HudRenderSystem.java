@@ -44,6 +44,13 @@ public class HudRenderSystem extends EntitySystem {
         float healthX = (hudViewport.getWorldWidth() + layout.width) / 2 - layout.width;
         font.draw(batch, layout, healthX, y);
 
+        if(GameManager.INSTANCE.isDoublePoints()){
+            font.setColor(Color.GOLD);
+            layout.setText(font, "DOUBLE POINTS");
+            float doubleY = y - layout.height - PADDING;
+            font.draw(batch, layout, PADDING, doubleY);
+        }
+
         if (GameManager.INSTANCE.isGameOver()) {
             font.setColor(Color.RED);
             layout.setText(font, "THE END");

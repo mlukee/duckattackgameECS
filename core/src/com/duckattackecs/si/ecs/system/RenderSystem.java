@@ -5,8 +5,11 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.SortedIteratingSystem;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.duckattackecs.si.common.GameManager;
 import com.duckattackecs.si.common.Mappers;
+import com.duckattackecs.si.config.GameConfig;
 import com.duckattackecs.si.ecs.component.DimensionComponent;
+import com.duckattackecs.si.ecs.component.ParticleComponent;
 import com.duckattackecs.si.ecs.component.PositionComponent;
 import com.duckattackecs.si.ecs.component.TextureComponent;
 import com.duckattackecs.si.ecs.component.ZOrderComparator;
@@ -47,7 +50,16 @@ public class RenderSystem extends SortedIteratingSystem {
         PositionComponent position = Mappers.POSITION.get(entity);
         DimensionComponent dimension = Mappers.DIMENSION.get(entity);
         TextureComponent texture = Mappers.TEXTURE.get(entity);
+        ParticleComponent pc = Mappers.PARTICLE.get(entity);
 
+        if (pc != null) {
+            if (pc.particleEffect.isComplete()) {
+                pc.particleEffect.start();
+            }
+
+            pc.particleEffect.update(deltaTime);
+            pc.particleEffect.draw(batch, deltaTime);
+        }
         batch.draw(texture.region,
                 position.x, position.y,
                 dimension.width / 2, dimension.height / 2,

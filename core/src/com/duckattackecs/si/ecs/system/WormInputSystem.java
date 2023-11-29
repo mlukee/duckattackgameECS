@@ -33,6 +33,9 @@ public class WormInputSystem extends IteratingSystem {
             movement.xSpeed = GameConfig.MAX_WORM_X_SPEED * deltaTime;
         } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             movement.xSpeed = -GameConfig.MAX_WORM_X_SPEED * deltaTime;
+        } else if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+            //TODO: Spawn bullet
+
         }
 
     }

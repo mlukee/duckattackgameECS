@@ -25,8 +25,10 @@ import com.duckattackecs.si.ecs.system.BoundsSystem;
 import com.duckattackecs.si.ecs.system.CleanUpSystem;
 import com.duckattackecs.si.ecs.system.CollisionSystem;
 import com.duckattackecs.si.ecs.system.DuckSpawnSystem;
+import com.duckattackecs.si.ecs.system.GoldenAppleSpawnSystem;
 import com.duckattackecs.si.ecs.system.HudRenderSystem;
 import com.duckattackecs.si.ecs.system.MovementSystem;
+import com.duckattackecs.si.ecs.system.ParticleSystem;
 import com.duckattackecs.si.ecs.system.RenderSystem;
 import com.duckattackecs.si.ecs.system.WorldWrapSystem;
 import com.duckattackecs.si.ecs.system.WormInputSystem;
@@ -53,7 +55,7 @@ public class DuckAttackECS extends ApplicationAdapter {
 	private ShapeRenderer renderer;
 	private PooledEngine engine;
 	private BitmapFont font;
-	private boolean debug = true;
+	private boolean debug = false;
 	
 	@Override
 	public void create () {
@@ -74,7 +76,7 @@ public class DuckAttackECS extends ApplicationAdapter {
 		assetManager.load(AssetDescriptors.GAME_OVER);
 		assetManager.load(AssetDescriptors.EATING);
 		assetManager.load(AssetDescriptors.COLLECTED);
-//		assetManager.load(AssetDescriptors.GOLDEN_APPLE_PE);
+		assetManager.load(AssetDescriptors.GOLDEN_APPLE_PE);
 //		assetManager.load(AssetDescriptors.BULLET_PE);
 		assetManager.finishLoading();
 		engine = new PooledEngine();
@@ -92,6 +94,8 @@ public class DuckAttackECS extends ApplicationAdapter {
 		engine.addSystem(new BoundsSystem());
 		engine.addSystem(new DuckSpawnSystem());
 		engine.addSystem(new AppleSpawnSystem());
+		engine.addSystem(new ParticleSystem());
+		engine.addSystem(new GoldenAppleSpawnSystem());
 		engine.addSystem(new CleanUpSystem());
 		engine.addSystem(new CollisionSystem());
 		engine.addSystem(new RenderSystem(batch, viewport));

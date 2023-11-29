@@ -18,7 +18,10 @@ public class StartUpSystem extends EntitySystem {
     }
 
     private void onStartUp() {
-        factory.createDuck();
+        factory.createBackground();
         factory.createWorm();
+        factory.createApple();
+        factory.createDuck();
+        factory.createGoldenApple();
     }
 }

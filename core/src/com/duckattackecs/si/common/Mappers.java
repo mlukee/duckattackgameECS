@@ -6,6 +6,7 @@ import com.duckattackecs.si.ecs.component.BoundsComponent;
 import com.duckattackecs.si.ecs.component.BulletComponent;
 import com.duckattackecs.si.ecs.component.DimensionComponent;
 import com.duckattackecs.si.ecs.component.DuckComponent;
+import com.duckattackecs.si.ecs.component.GoldenAppleComponent;
 import com.duckattackecs.si.ecs.component.MovementComponentXYR;
 import com.duckattackecs.si.ecs.component.ParticleComponent;
 import com.duckattackecs.si.ecs.component.PositionComponent;
@@ -48,6 +49,9 @@ public final class Mappers {
 
     public static final ComponentMapper<ParticleComponent> PARTICLE =
             ComponentMapper.getFor(ParticleComponent.class);
+
+    public static final ComponentMapper<GoldenAppleComponent> GOLDEN_APPLE =
+            ComponentMapper.getFor(GoldenAppleComponent.class);
 
     private Mappers() {
     }
