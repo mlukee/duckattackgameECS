@@ -92,8 +92,10 @@ public class CollisionSystem extends EntitySystem {
 
                 if (Intersector.overlaps(wormBounds.rectangle, goldenAppleBounds.rectangle)) {
                     goldenApple.hit = true;
+                    PowerUpSystem powerUpSystem = getEngine().getSystem(PowerUpSystem.class);
+                    powerUpSystem.activatePowerUp();
+                    GameManager.INSTANCE.activateDoublePoints();
                     GameManager.INSTANCE.incResult();
-                    GameManager.INSTANCE.activatePowerUp();
                     soundSystem.eating();
                     getEngine().removeEntity(goldenAppleEntity);
                 }

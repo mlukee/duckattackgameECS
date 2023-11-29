@@ -1,12 +1,13 @@
 package com.duckattackecs.si.common;
 
+import com.duckattackecs.si.config.GameConfig;
+
 public class GameManager {
 
     public static final GameManager INSTANCE = new GameManager();
 
     private int result;
     private int health;
-
     private boolean doublePoints = false;
 
     private GameManager() {
@@ -43,10 +44,10 @@ public class GameManager {
     public boolean isDoublePoints() {
         return doublePoints;
     }
-    public void activatePowerUp() {
+    public void activateDoublePoints() {
         doublePoints = true;
     }
-    public void deactivatePowerUp() {
+    public void deactivateDoublePoints() {
         doublePoints = false;
     }
 }

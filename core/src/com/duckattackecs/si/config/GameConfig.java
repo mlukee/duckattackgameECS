@@ -14,7 +14,7 @@ public class GameConfig {
     public static final float GOLDEN_APPLE_WIDTH = 32f;
     public static final float GOLDEN_APPLE_HEIGHT = 32f;
     public static final float GOLDEN_APPLE_SPAWN_TIME = 30f; // 30 seconds
-    public static final float GOLDEN_APPLE_DURATION = 10f; // 10 seconds
+    public static final float GOLDEN_APPLE_DURATION =7f; // 10 seconds
     public static final float GOLDEN_APPLE_SPEED_X_MIN = 2f;
 
     public static final float DUCK_SIZE = 48f;

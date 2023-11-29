@@ -29,6 +29,7 @@ import com.duckattackecs.si.ecs.system.GoldenAppleSpawnSystem;
 import com.duckattackecs.si.ecs.system.HudRenderSystem;
 import com.duckattackecs.si.ecs.system.MovementSystem;
 import com.duckattackecs.si.ecs.system.ParticleSystem;
+import com.duckattackecs.si.ecs.system.PowerUpSystem;
 import com.duckattackecs.si.ecs.system.RenderSystem;
 import com.duckattackecs.si.ecs.system.WorldWrapSystem;
 import com.duckattackecs.si.ecs.system.WormInputSystem;
@@ -88,6 +89,7 @@ public class DuckAttackECS extends ApplicationAdapter {
 		engine.addSystem(new StartUpSystem()); //called only at the start, to generate first entities
 
 		//'active' systems
+		engine.addSystem(new PowerUpSystem());
 		engine.addSystem(new WormInputSystem());
 		engine.addSystem(new MovementSystem());
 		engine.addSystem(new WorldWrapSystem());
